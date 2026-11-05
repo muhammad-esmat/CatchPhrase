@@ -1,0 +1,302 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* =========================
+   LIGHT MODE
+   ========================= */
+:root {
+  --mode-toggle-ball-radius: 20px;
+
+  /* Backgrounds */
+  --color-background: #f5f5f5;
+  --color-surface: #ffffff;
+  --color-border: #d1d5db;
+  --darkMode-bg: #e2e8f0;
+  --darkModeBall-bg: #334553;
+
+  /* Text */
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+
+  /* Game tiles */
+  --color-tile-empty: #ffffff;
+  --color-tile-empty-hover: #f3f4f6;
+
+  --color-tile-wrong: #374151;
+
+  --color-tile-correct: #f59e0b;
+
+  /*IP => in place*/
+  --color-tile-correctIP: #10b981;
+
+  /* Buttons */
+  --color-button-primary: #ff4b36;
+  --color-button-primary-hover: #e63e2b;
+
+  --color-button-secondary: #0d9488;
+  --color-button-secondary-hover: #0f766e;
+
+  /* Dark mode toggle */
+  --color-toggle-bg: #d1d5db;
+  --color-toggle-bg-hover: #9ca3af;
+
+  --color-toggle-circle: #ffffff;
+  --color-toggle-circle-hover: #f3f4f6;
+}
+/* =========================
+ DARK MODE
+ ========================= */
+[data-theme="dark"] {
+  /* Backgrounds */
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-border: #334155;
+  --darkMode-bg: #334553;
+  --darkModeBall-bg: #e2e8f0;
+
+  /* Text */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+
+  /* Game tiles */
+  --color-tile-empty: #1e293b;
+  --color-tile-empty-hover: #334155;
+
+  --color-tile-wrong: #475569;
+
+  --color-tile-correct: #f59e0b;
+
+  /*IP => in place*/
+  --color-tile-correctIP: #10b981;
+
+  /* Buttons */
+  --color-button-primary: #ef4444;
+  --color-button-primary-hover: #f87171;
+
+  --color-button-secondary: #0d9488;
+  --color-button-secondary-hover: #14b8a6;
+
+  /* Dark mode toggle */
+  --color-toggle-bg: #334155;
+  --color-toggle-bg-hover: #3b475a;
+
+  --color-toggle-circle: #10b981;
+  --color-toggle-circle-hover: #34d399;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr;
+  padding: 10px 0;
+  margin: 0 0 50px;
+  background-color: var(--color-surface);
+
+  h1 {
+    grid-column: 2 / span 1;
+    font-size: 1.8rem;
+    text-align: center;
+  }
+  .darkMode-cont {
+    grid-column: 3 / span 1;
+    position: absolute;
+    height: 50px;
+    right: 10px;
+    top: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 100%;
+    .darkMode-btn {
+      display: flex;
+      align-items: center;
+      height: calc(var(--mode-toggle-ball-radius) + 15px);
+      width: calc(var(--mode-toggle-ball-radius) * 2.5 + 20px);
+      border: 2px solid black;
+      border-radius: 35px;
+      padding: 0 10px;
+      background-color: var(--darkMode-bg);
+      color: var(--color-text-primary);
+      cursor: pointer;
+
+      &.darkMode-toggled {
+        background-color: var(--darkMode-bg);
+      }
+      .ball {
+        background-color: var(--darkModeBall-bg);
+        width: var(--mode-toggle-ball-radius);
+        height: var(--mode-toggle-ball-radius);
+        border-radius: 50%;
+        margin-left: calc(100% - var(--mode-toggle-ball-radius));
+        margin-right: 0;
+        transition:
+          margin-left 150ms ease-in-out,
+          margin-right 150ms ease-in-out;
+      }
+      &.darkMode-toggled .ball {
+        margin-right: calc(100% - var(--mode-toggle-ball-radius));
+        margin-left: 0;
+        background-color: var(--darkModeBall-bg);
+      }
+    }
+  }
+
+  .settings-cont {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    grid-column: 1 / span 1;
+    svg {
+      max-width: 40px;
+      transition: 0.5s;
+      &:hover {
+        transform: rotate(180deg);
+      }
+    }
+    .overlay {
+      width: 100px;
+      height: 100px;
+      left: 5%;
+      top: 60%;
+      position: absolute;
+      z-index: 3;
+    }
+  }
+}
+.guess-game {
+  text-align: center;
+  width: 1000px;
+  margin: 20px auto;
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  .game-area {
+    text-align: center;
+    .inputs {
+      & > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+        span {
+          font-size: 2rem;
+          margin-right: 15px;
+          font-weight: bold;
+        }
+        input {
+          background-color: #fff;
+          width: 50px;
+          height: 50px;
+          border-radius: 10px;
+          font-size: 2rem;
+          text-align: center;
+          border: none;
+          border-bottom: 3px solid #333;
+          caret-color: #333;
+          &:focus {
+            outline: 2px solid #ccc;
+          }
+
+          &.in-place,
+          &.not-in-place,
+          &.wrong {
+            color: white;
+          }
+          &.in-place {
+            background-color: var(--color-tile-correctIP);
+          }
+          &.not-in-place {
+            background-color: var(--color-tile-correct);
+          }
+          &.wrong {
+            background-color: var(--color-tile-wrong);
+          }
+        }
+      }
+      .disable-input {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+    }
+    .control {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 1fr;
+      .check {
+        background-color: red;
+      }
+      .hint {
+        background-color: blue;
+      }
+    }
+  }
+
+  .key-colors {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .key-color {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background-color: var(--color-surface);
+
+      .key {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        margin-right: 10px;
+
+        &.in-place {
+          background-color: var(--color-tile-correctIP);
+        }
+
+        &.not-in-place {
+          background-color: var(--color-tile-correct);
+        }
+
+        &.wrong {
+          background-color: var(--color-tile-wrong);
+        }
+      }
+
+      .key-text {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.footer {
+  text-align: center;
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #333;
+  color: #fff;
+}
+
+.displayNone {
+  display: none;
+}
