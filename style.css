@@ -4,9 +4,6 @@
   box-sizing: border-box;
 }
 
-/* =========================
-   LIGHT MODE
-   ========================= */
 :root {
   --mode-toggle-ball-radius: 20px;
 
@@ -55,16 +52,17 @@
   --color-settings-btn: #656565;
   --background-color-settings-button-hover: #80808070;
 
+  --border-bottom-inputs: #333;
+  --text-color-inputs: #333;
+  
   /* Dark mode toggle */
   --color-toggle-bg: #d1d5db;
   --color-toggle-bg-hover: #9ca3af;
 
   --color-toggle-circle: #ffffff;
   --color-toggle-circle-hover: #f3f4f6;
+  
 }
-/* =========================
- DARK MODE
- ========================= */
 [data-theme="dark"] {
   /* Backgrounds */
   --color-background: #0f172a;
@@ -110,6 +108,9 @@
   --color-settings-icon: invert(100%) sepia(0%) saturate(7500%)
     hue-rotate(97deg) brightness(105%) contrast(96%);
     
+  --border-bottom-inputs: #333;
+  --text-color-inputs: #333;
+  
   /* Dark mode toggle */
   --color-toggle-bg: #334155;
   --color-toggle-bg-hover: #3b475a;
@@ -129,12 +130,14 @@ body {
 }
 
 header {
-  position: relative;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  margin: 0 0 50px;
   display: grid;
   grid-template-columns: 1fr 3fr 1fr;
   grid-template-rows: 1fr;
   padding: 10px 0;
-  margin: 0 0 50px;
   background-color: var(--color-surface);
   height: 5rem;
 
@@ -210,13 +213,13 @@ header {
       background-color: white;
       border-radius: 25px;
       min-width: 200px;
+      h3 {
+        margin: 0;
+        margin-bottom: 2px;
+      }
       .choice {
         display: flex;
         gap: 8px;
-        h3 {
-          margin: 0;
-          margin-bottom: 2px;
-        }
         button {
           border: none;
           color: var(--color-settings-btn);
@@ -237,13 +240,13 @@ header {
 
 .guess-game {
   text-align: center;
-  width: 1000px;
-  margin: 20px auto;
+  margin: calc(5rem + 25px) auto;
   padding: 20px 30px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-
+  width: 1000px;
+  
   .game-area {
     text-align: center;
     .inputs {
@@ -259,15 +262,18 @@ header {
           font-weight: bold;
         }
         input {
-          background-color: #fff;
           width: 50px;
           height: 50px;
           border-radius: 10px;
           font-size: 2rem;
           text-align: center;
           border: none;
-          border-bottom: 3px solid #333;
-          caret-color: #333;
+          border-bottom: 3px solid var(--border-bottom-inputs);
+         
+          /* to hide the cursor caret */
+          color: transparent;
+          text-shadow: 0 0 0 var(--text-color-inputs);
+          
           &:focus {
             outline: 2px solid #ccc;
           }
@@ -336,47 +342,49 @@ header {
       width: 20px;
     }
   }
-}
-.key-colors {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  .key-color {
+  .key-colors {
     display: flex;
-    align-items: center;
-    padding: 15px;
-    background-color: var(--color-surface);
-
-    .key {
-      width: 50px;
-      height: 50px;
-      border-radius: 15px;
-      margin-right: 10px;
-
-      &.in-place {
-        background-color: var(--color-tile-correctIP);
+    flex-direction: column;
+    gap: 10px;
+  
+    .key-color {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background-color: var(--color-surface);
+  
+      .key {
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        margin-right: 10px;
+  
+        &.in-place {
+          background-color: var(--color-tile-correctIP);
+        }
+  
+        &.not-in-place {
+          background-color: var(--color-tile-correct);
+        }
+  
+        &.wrong {
+          background-color: var(--color-tile-wrong);
+        }
       }
-
-      &.not-in-place {
-        background-color: var(--color-tile-correct);
+  
+      .key-text {
+        font-size: 1.2rem;
+        font-weight: bold;
       }
-
-      &.wrong {
-        background-color: var(--color-tile-wrong);
-      }
-    }
-
-    .key-text {
-      font-size: 1.2rem;
-      font-weight: bold;
     }
   }
 }
 
 .footer {
+  position: fixed;
+  bottom: 0;
   padding: 20px;
-  width: 100%;
+  width: 100vw;
   background-color: #333;
   color: #fff;
   text-align: center;

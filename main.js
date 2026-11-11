@@ -51,14 +51,11 @@ difficultyChoice.addEventListener("click", (e) => {
 
   if (e.target.classList.contains("easy")) {
     replaceInput(6, 6);
-  }
-  else if (e.target.classList.contains("medium")) {
+  } else if (e.target.classList.contains("medium")) {
     replaceInput(5, 6);
-  }
-  else if (e.target.classList.contains("hard")) {
+  } else if (e.target.classList.contains("hard")) {
     replaceInput(4, 6);
-  }
-  else if (e.target.classList.contains("extreme")) {
+  } else if (e.target.classList.contains("extreme")) {
     replaceInput(3, 6);
   }
 });
@@ -111,7 +108,7 @@ function generateInput(tCount, lCount) {
       const currentIndex = index;
       const prevIndex = currentIndex - 1;
       const nextIndex = currentIndex + 1;
-      
+
       if (e.key === "ArrowLeft") {
         e.preventDefault();
         if (inputs[prevIndex]) inputs[prevIndex].focus();
@@ -120,22 +117,24 @@ function generateInput(tCount, lCount) {
         if (inputs[nextIndex]) inputs[nextIndex].focus();
       } else if (e.key === "Backspace") {
         e.preventDefault();
-        if (inputs[currentIndex].value !== '') {
-          inputs[currentIndex].value = '';
+        if (inputs[currentIndex].value !== "") {
+          inputs[currentIndex].value = "";
         } else if (inputs[prevIndex]) {
           inputs[prevIndex].focus();
         }
-      } else if (e.key >= 'a' && e.key <= 'z' || e.key >= 'A' && e.key <= 'Z') {
-        if (
-          !e.altKey &&
-          !e.ctrlKey &&
-          !e.metaKey &&
-          !e.shiftKey
-        ) {
-          e.preventDefault();
-          inputs[currentIndex].value = e.key;
-          inputs[nextIndex].focus();
-        }
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        inputs[currentIndex].value = "";
+      } else if (
+        ((e.key >= "a" && e.key <= "z") || (e.key >= "A" && e.key <= "Z")) &&
+        !e.altKey &&
+        !e.ctrlKey &&
+        !e.metaKey &&
+        !e.shiftKey
+      ) {
+        e.preventDefault();
+        inputs[currentIndex].value = e.key;
+        inputs[nextIndex].focus();
       } else {
         e.preventDefault();
       }
