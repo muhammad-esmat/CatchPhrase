@@ -39,6 +39,22 @@
   --color-button-secondary: #0d9488;
   --color-button-secondary-hover: #0f766e;
 
+  --background-color-button-check: #2563eb;
+  --background-color-button-check-hover: #1D4ED8;
+  --color-button-check: white;
+  --filter-button-check-icon: invert(100%) sepia(0%) saturate(7500%)
+    hue-rotate(97deg) brightness(105%) contrast(96%);
+  --background-color-button-hint: transparent;
+  --background-color-button-hint-hover: #EFF6FF;
+  --color-button-hint: #2563eb;
+  --filter-button-hint-icon: invert(27%) sepia(83%) saturate(2094%)
+    hue-rotate(213deg) brightness(94%) contrast(95%);
+
+  --color-settings-icon: black;
+  
+  --color-settings-btn: #656565;
+  --background-color-settings-button-hover: #80808070;
+
   /* Dark mode toggle */
   --color-toggle-bg: #d1d5db;
   --color-toggle-bg-hover: #9ca3af;
@@ -79,6 +95,21 @@
   --color-button-secondary: #0d9488;
   --color-button-secondary-hover: #14b8a6;
 
+  --background-color-button-check: #2563eb;
+  --background-color-button-check-hover: #1D4ED8;
+  --color-button-check: white;
+  --color-button-check-icon: invert(100%) sepia(0%) saturate(7500%)
+    hue-rotate(97deg) brightness(105%) contrast(96%);
+  --background-color-button-hint: transparent;
+  --background-color-button-hint-hover: #EFF6FF;
+  --color-button-hint: white;
+  --filter-button-hint-icon: invert(100%) sepia(0%) saturate(7500%)
+    hue-rotate(97deg) brightness(105%) contrast(96%);
+  /*royal blue*/
+
+  --color-settings-icon: invert(100%) sepia(0%) saturate(7500%)
+    hue-rotate(97deg) brightness(105%) contrast(96%);
+    
   /* Dark mode toggle */
   --color-toggle-bg: #334155;
   --color-toggle-bg-hover: #3b475a;
@@ -92,6 +123,9 @@ body {
   background-color: var(--color-background);
   color: var(--color-text-primary);
   font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 header {
@@ -102,6 +136,7 @@ header {
   padding: 10px 0;
   margin: 0 0 50px;
   background-color: var(--color-surface);
+  height: 5rem;
 
   h1 {
     grid-column: 2 / span 1;
@@ -110,21 +145,17 @@ header {
   }
   .darkMode-cont {
     grid-column: 3 / span 1;
-    position: absolute;
-    height: 50px;
-    right: 10px;
-    top: 0%;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 150px;
+    width: 5rem;
     height: 100%;
     .darkMode-btn {
       display: flex;
       align-items: center;
       height: calc(var(--mode-toggle-ball-radius) + 15px);
       width: calc(var(--mode-toggle-ball-radius) * 2.5 + 20px);
-      border: 2px solid black;
+      border: 1px solid black;
       border-radius: 35px;
       padding: 0 10px;
       background-color: var(--darkMode-bg);
@@ -160,23 +191,50 @@ header {
     align-items: center;
     justify-content: center;
     grid-column: 1 / span 1;
-    svg {
-      max-width: 40px;
-      transition: 0.5s;
-      &:hover {
+    &:hover {
+      .settings-icon {
         transform: rotate(180deg);
       }
     }
-    .overlay {
-      width: 100px;
-      height: 100px;
-      left: 5%;
-      top: 60%;
+    .settings-icon {
+      max-width: 40px;
+      transition: transform 0.5s;
+      filter: var(--color-settings-icon);
+    }
+    .settings-panel {
+      top: 100%;
+      margin-left: 5rem;
       position: absolute;
-      z-index: 3;
+      z-index: 2;
+      padding: 10px 20px;
+      background-color: white;
+      border-radius: 25px;
+      min-width: 200px;
+      .choice {
+        display: flex;
+        gap: 8px;
+        h3 {
+          margin: 0;
+          margin-bottom: 2px;
+        }
+        button {
+          border: none;
+          color: var(--color-settings-btn);
+          cursor: pointer;
+          border-radius: 5px;
+          padding: 5px;
+          &:hover {
+            background-color: var(--background-color-settings-button-hover);
+          }
+          &:last-child {
+            font-weight: bold;
+          }
+        }
+      }
     }
   }
 }
+
 .guess-game {
   text-align: center;
   width: 1000px;
@@ -235,66 +293,93 @@ header {
         pointer-events: none;
       }
     }
+    
     .control {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      grid-template-rows: 1fr;
+      margin-top: 1.875rem;
+      .check,
+      .hint {
+        border-radius: 35px;
+        margin: 0 10px;
+        font-size: 1.2rem;
+        padding: 15px 35px;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        transition: background-color .2s;
+      }
       .check {
-        background-color: red;
+        border: none;
+        background-color: var(--background-color-button-check);
+        &:hover {
+          background-color: var(--background-color-button-check-hover);
+        }
+        color: var(--color-button-check);
+        svg {
+          filter: var(--filter-button-check-icon);
+        }
       }
       .hint {
-        background-color: blue;
+        border: 0.1rem solid var(--color-button-hint);
+        background-color: var(--background-color-button-hint);
+        color: var(--color-button-hint);
+        &:hover {
+          background-color: var(--background-color-button-hint-hover);
+        }
+        svg {
+          filter: var(--filter-button-hint-icon);
+        }
       }
     }
+    .check svg,
+    .hint svg {
+      vertical-align: top;
+      width: 20px;
+    }
   }
+}
+.key-colors {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
-  .key-colors {
+  .key-color {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--color-surface);
 
-    .key-color {
-      display: flex;
-      align-items: center;
-      padding: 15px;
-      background-color: var(--color-surface);
+    .key {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      margin-right: 10px;
 
-      .key {
-        width: 50px;
-        height: 50px;
-        border-radius: 15px;
-        margin-right: 10px;
-
-        &.in-place {
-          background-color: var(--color-tile-correctIP);
-        }
-
-        &.not-in-place {
-          background-color: var(--color-tile-correct);
-        }
-
-        &.wrong {
-          background-color: var(--color-tile-wrong);
-        }
+      &.in-place {
+        background-color: var(--color-tile-correctIP);
       }
 
-      .key-text {
-        font-size: 1.2rem;
-        font-weight: bold;
+      &.not-in-place {
+        background-color: var(--color-tile-correct);
       }
+
+      &.wrong {
+        background-color: var(--color-tile-wrong);
+      }
+    }
+
+    .key-text {
+      font-size: 1.2rem;
+      font-weight: bold;
     }
   }
 }
 
 .footer {
-  text-align: center;
   padding: 20px;
-  position: fixed;
-  bottom: 0;
-  left: 0;
   width: 100%;
   background-color: #333;
   color: #fff;
+  text-align: center;
 }
 
 .displayNone {

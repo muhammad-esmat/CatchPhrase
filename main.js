@@ -1,11 +1,9 @@
-// document.addEventListener("DOMContentLoaded", listener)
-
 // game name title
 let gameName = "Guess The Word";
 document.title = gameName;
 document.querySelector("h1").innerHTML = gameName;
 document.querySelector("footer").innerHTML =
-  `${gameName} Game Created By Elzero Web school`;
+  `Created By Elzero Web school, improved by Muhammad Esmat`;
 
 // dark mode toggle
 const colorModeBtn = document.querySelector(".darkMode-btn");
@@ -24,14 +22,53 @@ function syncColorThemeData() {
 
 // game settings
 let triesCount = 6;
+let maxTriesCount = 6;
 let letterCount = 6;
+let maxLetterCount = 6;
 let currentTry = 1;
 
-function generateInput() {
+// settings icon
+const settingsCont = document.querySelector(".settings-cont");
+const settingsButton = document.querySelector(".settings-icon");
+const settingsOverlay = document.querySelector(
+  ".settings-cont .settings-panel",
+);
+
+settingsOverlay.classList.add("displayNone");
+settingsCont.addEventListener("mousemove", () => {
+  settingsOverlay.classList.remove("displayNone");
+});
+settingsCont.addEventListener("mouseleave", () => {
+  settingsOverlay.classList.add("displayNone");
+});
+
+// diffiuculty settings
+const difficultyChoice = document.querySelector(
+  ".settings-cont .settings-panel .choice",
+);
+difficultyChoice.addEventListener("click", (e) => {
+  e.stopPropagation();
+
+  if (e.target.classList.contains("easy")) {
+    replaceInput(6, 6);
+  }
+  else if (e.target.classList.contains("medium")) {
+    replaceInput(5, 6);
+  }
+  else if (e.target.classList.contains("hard")) {
+    replaceInput(4, 6);
+  }
+  else if (e.target.classList.contains("extreme")) {
+    replaceInput(3, 6);
+  }
+});
+
+// generate inputs
+function generateInput(tCount, lCount) {
   const inputsCont = document.querySelector(".inputs");
 
   // create main try div
-  for (let i = 1; i <= triesCount; i++) {
+  for (let i = 1; i <= tCount; i++) {
     const tryDiv = document.createElement("div");
     tryDiv.classList.add(`try-${i}`);
     tryDiv.innerHTML = `<span>Try ${i}</span>`;
@@ -39,7 +76,7 @@ function generateInput() {
     if (i !== 1) tryDiv.classList.add("disable-input");
 
     // Create inputs
-    for (let j = 1; j <= letterCount; j++) {
+    for (let j = 1; j <= lCount; j++) {
       const input = document.createElement("input");
 
       input.type = "text";
@@ -64,49 +101,62 @@ function generateInput() {
     // event keyup detects all of them
 
     input.addEventListener("input", (e) => {
-      input.value = input.value.toLowerCase();
       if (input.value.length && inputs[index + 1]) {
+        e.preventDefault();
         const nextInput = inputs[index + 1];
-        nextInput.focus()
-      };
+        nextInput.focus();
+      }
     });
     input.addEventListener("keydown", (e) => {
       const currentIndex = index;
       const prevIndex = currentIndex - 1;
       const nextIndex = currentIndex + 1;
-
-      if (e.key == "ArrowLeft") {
+      
+      if (e.key === "ArrowLeft") {
         e.preventDefault();
         if (inputs[prevIndex]) inputs[prevIndex].focus();
-        
-      } else if (e.key == "ArrowRight") {
+      } else if (e.key === "ArrowRight") {
         e.preventDefault();
         if (inputs[nextIndex]) inputs[nextIndex].focus();
-        
-      } else if (e.key == "Backspace") {
-        // e.preventDefault();
-        if (inputs[currentIndex].value != "") {
-          inputs[currentIndex].value = "";
+      } else if (e.key === "Backspace") {
+        e.preventDefault();
+        if (inputs[currentIndex].value !== '') {
+          inputs[currentIndex].value = '';
         } else if (inputs[prevIndex]) {
           inputs[prevIndex].focus();
         }
+      } else if (e.key >= 'a' && e.key <= 'z' || e.key >= 'A' && e.key <= 'Z') {
+        if (
+          !e.altKey &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          !e.shiftKey
+        ) {
+          e.preventDefault();
+          inputs[currentIndex].value = e.key;
+          inputs[nextIndex].focus();
+        }
+      } else {
+        e.preventDefault();
       }
     });
   });
 }
-// settings button
-const settingsCont = document.querySelector(".settings-cont");
-const settingsButton = document.querySelector(".settings-btn");
-const settingsOverlay = document.querySelector(".settings-cont .overlay");
 
-settingsOverlay.classList.add("displayNone");
-settingsCont.addEventListener("mousemove", () => {
-  settingsOverlay.classList.remove("displayNone");
-});
-settingsCont.addEventListener("mouseleave", () => {
-  settingsOverlay.classList.add("displayNone");
-});
+// replace inputs
+function replaceInput(tCount, lCount) {
+  const inputsCont = document.querySelectorAll(".inputs > div");
+  inputsCont.forEach((div) => {
+    div.remove();
+  });
 
-window.onload = function () {
-  generateInput();
-};
+  letterCount = lCount;
+  triesCount = tCount;
+  generateInput((tCount = triesCount), (lCount = letterCount));
+}
+
+// document.addEventListener("DOMContentLoaded", listener)
+document.addEventListener("DOMContentLoaded", (e) => {
+  // generateSettings((tCount = maxTriesCount), (lCount = maxLetterCount));
+  generateInput((tCount = triesCount), (lCount = letterCount));
+});
