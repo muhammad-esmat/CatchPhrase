@@ -105,8 +105,7 @@
     hue-rotate(97deg) brightness(105%) contrast(96%);
   /*royal blue*/
 
-  --color-settings-icon: invert(100%) sepia(0%) saturate(7500%)
-    hue-rotate(97deg) brightness(105%) contrast(96%);
+  --color-settings-icon: white;
     
   --border-bottom-inputs: #333;
   --text-color-inputs: #333;
@@ -202,7 +201,7 @@ header {
     .settings-icon {
       max-width: 40px;
       transition: transform 0.5s;
-      filter: var(--color-settings-icon);
+      color: var(--color-settings-icon);
     }
     .settings-panel {
       top: 100%;
@@ -302,9 +301,10 @@ header {
     
     .control {
       margin-top: 1.875rem;
+      display: flex;
       .check,
       .hint {
-        border-radius: 35px;
+        border-radius: 15px;
         margin: 0 10px;
         font-size: 1.2rem;
         padding: 15px 35px;
@@ -314,6 +314,7 @@ header {
         transition: background-color .2s;
       }
       .check {
+        flex: 1;
         border: none;
         background-color: var(--background-color-button-check);
         &:hover {
@@ -321,10 +322,11 @@ header {
         }
         color: var(--color-button-check);
         svg {
-          filter: var(--filter-button-check-icon);
+          color: var(--color-button-check);
         }
       }
       .hint {
+        width: fit-content;
         border: 0.1rem solid var(--color-button-hint);
         background-color: var(--background-color-button-hint);
         color: var(--color-button-hint);
@@ -332,7 +334,22 @@ header {
           background-color: var(--background-color-button-hint-hover);
         }
         svg {
-          filter: var(--filter-button-hint-icon);
+          color: var(--color-button-hint);
+        }
+      }
+      .check.disabled,
+      .hint.disabled {
+        pointer-events: none;
+        cursor: not-allowed;
+      }
+      .check.disabled {
+        background-color: #333;
+      }
+      .hint.disabled {
+        border-color: #333;
+        color: #333;
+        & > svg {
+          color: #333;
         }
       }
     }
@@ -340,6 +357,23 @@ header {
     .hint svg {
       vertical-align: top;
       width: 20px;
+    }
+    .message {
+      margin-top: 2rem;
+      text-align: center;
+      font-weight: bold;
+      font-size: 30px;
+      span {
+        font-weight: bold;
+        display: block;
+        font-size: 50px;
+        color: var(--primary-color);
+        text-transform: capitalize;
+        margin-top: 10px; 
+      }
+      p {
+        margin-top: 15px;
+      }
     }
   }
   .key-colors {
