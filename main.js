@@ -20,12 +20,19 @@ function syncColorThemeData() {
   colorModeBtn.classList.toggle("darkMode-toggled");
 }
 
-// game settings
+// game options
 let triesCount = 6;
 let maxTriesCount = 6;
 let letterCount = 6;
 let maxLetterCount = 6;
 let currentTry = 1;
+
+// manage words
+let wordToGuess = "";
+let words = ["Elzero", "Coffee", "School", "Python", "Pencil", "Banana", "Carrot"];
+wordToGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
+console.log(wordToGuess);
+const messageEl = document.querySelector(".message");
 
 // settings icon
 const settingsCont = document.querySelector(".settings-cont");
@@ -97,43 +104,30 @@ function generateInput(tCount, lCount) {
     // event input only detects characters and symbols (no special keys) (detects when a character is changed (can detect 'Backspace' or 'Delete' if a character is changed))
     // event keyup detects all of them
 
-    input.addEventListener("input", (e) => {
-      if (input.value.length && inputs[index + 1]) {
-        e.preventDefault();
-        const nextInput = inputs[index + 1];
-        nextInput.focus();
-      }
-    });
     input.addEventListener("keydown", (e) => {
       const currentIndex = index;
       const prevIndex = currentIndex - 1;
       const nextIndex = currentIndex + 1;
+      const enteredChar = String.fromCharCode(e.keyCode);
+      const keyIsChar = /^[A-Za-z]+$/.test(enteredChar);
 
       if (e.key === "ArrowLeft") {
-        e.preventDefault();
         if (inputs[prevIndex]) inputs[prevIndex].focus();
       } else if (e.key === "ArrowRight") {
-        e.preventDefault();
         if (inputs[nextIndex]) inputs[nextIndex].focus();
       } else if (e.key === "Backspace") {
-        e.preventDefault();
         if (inputs[currentIndex].value !== "") {
           inputs[currentIndex].value = "";
         } else if (inputs[prevIndex]) {
           inputs[prevIndex].focus();
         }
-      } else if (e.key === ' ') {
-        e.preventDefault();
+      } else if (e.key === " ") {
         inputs[currentIndex].value = "";
-      } else if (
-        ((e.key >= "a" && e.key <= "z") || (e.key >= "A" && e.key <= "Z")) &&
-        !e.altKey &&
-        !e.ctrlKey &&
-        !e.metaKey &&
-        !e.shiftKey
-      ) {
+      } else if (e.key === "Enter") {
+        handleGuesses();
+      } else if (keyIsChar) {
         e.preventDefault();
-        inputs[currentIndex].value = e.key;
+        inputs[currentIndex].value = enteredChar.toLowerCase();
         inputs[nextIndex].focus();
       } else {
         e.preventDefault();
@@ -154,8 +148,81 @@ function replaceInput(tCount, lCount) {
   generateInput((tCount = triesCount), (lCount = letterCount));
 }
 
+// check word
+const guessBtn = document.querySelector(".check");
+guessBtn.addEventListener("click", handleGuesses);
+function handleGuesses() {
+  let successfulGuess = true;
+
+  for (let i = 1; i <= letterCount; i++) {
+    let inputField = document.querySelector(`#guess-${currentTry}-letter-${i}`);
+    let enteredLetter = inputField.value.toLowerCase();
+    let correctLetter = wordToGuess[i - 1];
+    if (enteredLetter === correctLetter) {
+      inputField.classList.add("in-place");
+    } else if (wordToGuess.includes(enteredLetter) && enteredLetter !== "") {
+      inputField.classList.add("not-in-place");
+      successfulGuess = false;
+    } else {
+      inputField.classList.add("wrong");
+      successfulGuess = false;
+    }
+  }
+
+  // Check if user won or lost
+  if (successfulGuess) {
+    messageEl.innerHTML = `You succeeded after <span>${currentTry}</span> ${currentTry===1? "try" : "tries"}`
+    
+    // add disable class to try inputs
+    const allTries = document.querySelectorAll('.inputs > div');
+    allTries.forEach((tryDiv) => {
+      tryDiv.classList.add("disable-input");
+    })
+    
+    // add disable class to try guess btn & hint btn
+    guessBtn.classList.add("disabled");
+    const hintBtn = document.querySelector(".hint");
+    hintBtn.classList.add("disabled");
+  } else {
+    const tries = document.querySelectorAll(".inputs > div");
+    // if we aren't in the last try
+    if (currentTry !== triesCount) {
+      // not the first try
+      if (currentTry !== 0) {
+        controlTry(tries[currentTry - 1], disable = true);
+      }
+      
+      // enable the next try
+      controlTry(tries[currentTry], disable = false);
+      tries[currentTry].children[1].focus();
+      currentTry++;
+    }
+    else {
+      messageEl.innerHTML = `You lost after <span>${currentTry}</span> tries`;
+      controlTry(tries[currentTry-1], disable = true);
+    }
+  }
+}
+function controlTry(inputDiv, disable) {
+  if (disable) {
+    inputDiv.classList.add("disable-input");
+    for (let i = 0; i < inputDiv.children.length; i++) {
+      if (inputDiv.children[i].tagName === "INPUT") {
+        inputDiv.children[i].disabled = true;
+      }
+    }
+  }
+  else {
+    inputDiv.classList.remove("disable-input");
+    for (let i = 0; i < inputDiv.children.length; i++) {
+      if (inputDiv.children[i].tagName === "INPUT") {
+        inputDiv.children[i].disabled = false;
+      }
+    }
+  }
+}
+
 // document.addEventListener("DOMContentLoaded", listener)
-document.addEventListener("DOMContentLoaded", (e) => {
-  // generateSettings((tCount = maxTriesCount), (lCount = maxLetterCount));
+document.addEventListener("DOMContentLoaded", () => {
   generateInput((tCount = triesCount), (lCount = letterCount));
 });
