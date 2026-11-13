@@ -29,9 +29,21 @@ let currentTry = 1;
 
 // manage words
 let wordToGuess = "";
-let words = ["Elzero", "Coffee", "School", "Python", "Pencil", "Banana", "Carrot"];
-wordToGuess = words[Math.floor(Math.random() * words.length)].toLowerCase();
-console.log(wordToGuess);
+let words = new Map()
+words.set(4, ["cake", "wake", "plus", "java", "rust", "iron"]);
+words.set(5, ["break", "phone", "bread", "alive", "awake"]);
+words.set(6, ["Elzero", "Coffee", "School", "Python", "Pencil", "Banana", "Carrot"]);
+  
+function chooseWord() {
+  letterCount = ([4,5,6])[ Math.min(Math.floor(Math.random() * 3), 2) ];
+  console.log("letterCount when choosing letter", letterCount);
+  const wordArr = words.get(letterCount);
+  
+  console.log(words.get(letterCount));
+  wordToGuess = wordArr[Math.floor(Math.random() * wordArr.length)].toLowerCase();
+  
+  console.log(wordToGuess);
+}
 const messageEl = document.querySelector(".message");
 
 // settings icon
@@ -93,10 +105,10 @@ function generateInput(tCount, lCount) {
     inputsCont.appendChild(tryDiv);
   }
   inputsCont.children[0].children[1].focus();
-
+  
   // disabled all input except first one
   document.querySelectorAll(".disable-input input").forEach((input) => {
-    input.disabled = "true";
+    input.disabled = true;
   });
 
   const inputs = document.querySelectorAll(".inputs input");
@@ -153,8 +165,12 @@ const guessBtn = document.querySelector(".check");
 guessBtn.addEventListener("click", handleGuesses);
 function handleGuesses() {
   let successfulGuess = true;
+  const hintBtn = document.querySelector(".hint");
 
+
+  console.log("letterCount in handleGuesses: ", letterCount);
   for (let i = 1; i <= letterCount; i++) {
+    console.log(currentTry, i);
     let inputField = document.querySelector(`#guess-${currentTry}-letter-${i}`);
     let enteredLetter = inputField.value.toLowerCase();
     let correctLetter = wordToGuess[i - 1];
@@ -176,21 +192,18 @@ function handleGuesses() {
     // add disable class to try inputs
     const allTries = document.querySelectorAll('.inputs > div');
     allTries.forEach((tryDiv) => {
-      tryDiv.classList.add("disable-input");
+      controlTry(tryDiv, disable = true);
     })
-    
     // add disable class to try guess btn & hint btn
     guessBtn.classList.add("disabled");
-    const hintBtn = document.querySelector(".hint");
     hintBtn.classList.add("disabled");
   } else {
     const tries = document.querySelectorAll(".inputs > div");
     // if we aren't in the last try
     if (currentTry !== triesCount) {
-      // not the first try
-      if (currentTry !== 0) {
-        controlTry(tries[currentTry - 1], disable = true);
-      }
+      console.log("not last try");
+      // disable the current try
+      controlTry(tries[currentTry - 1], disable = true);
       
       // enable the next try
       controlTry(tries[currentTry], disable = false);
@@ -198,10 +211,20 @@ function handleGuesses() {
       currentTry++;
     }
     else {
+      console.log("last try");
       messageEl.innerHTML = `You lost after <span>${currentTry}</span> tries`;
       controlTry(tries[currentTry-1], disable = true);
+      
+      // add disable class to try guess btn & hint btn
+      guessBtn.classList.add("disabled");
+      hintBtn.classList.add("disabled");
     }
+    
+    // add disable class to try guess btn & hint btn
+    guessBtn.classList.add("disabled");
+    hintBtn.classList.add("disabled");
   }
+  
 }
 function controlTry(inputDiv, disable) {
   if (disable) {
@@ -224,5 +247,7 @@ function controlTry(inputDiv, disable) {
 
 // document.addEventListener("DOMContentLoaded", listener)
 document.addEventListener("DOMContentLoaded", () => {
-  generateInput((tCount = triesCount), (lCount = letterCount));
+  chooseWord();
+  console.log("letterCount when content loaded: ", letterCount);
+  generateInput(tCount = triesCount, lCount = letterCount);
 });
