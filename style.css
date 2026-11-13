@@ -239,7 +239,7 @@ header {
 
 .guess-game {
   text-align: center;
-  margin: calc(5rem + 25px) auto;
+  margin: calc(7rem) auto;
   padding: 20px 30px;
   display: flex;
   justify-content: space-between;

@@ -68,15 +68,18 @@ const difficultyChoice = document.querySelector(
 difficultyChoice.addEventListener("click", (e) => {
   e.stopPropagation();
 
+  chooseWord();
   if (e.target.classList.contains("easy")) {
-    replaceInput(6, 6);
+    replaceInput(6, letterCount);
   } else if (e.target.classList.contains("medium")) {
-    replaceInput(5, 6);
+    replaceInput(5, letterCount);
   } else if (e.target.classList.contains("hard")) {
-    replaceInput(4, 6);
+    replaceInput(4, letterCount);
   } else if (e.target.classList.contains("extreme")) {
-    replaceInput(3, 6);
+    replaceInput(3, letterCount);
   }
+
+  currentTry = 1;
 });
 
 // generate inputs
@@ -140,7 +143,8 @@ function generateInput(tCount, lCount) {
       } else if (keyIsChar) {
         e.preventDefault();
         inputs[currentIndex].value = enteredChar.toLowerCase();
-        inputs[nextIndex].focus();
+        if (inputs[nextIndex])
+          inputs[nextIndex].focus();
       } else {
         e.preventDefault();
       }
@@ -155,9 +159,16 @@ function replaceInput(tCount, lCount) {
     div.remove();
   });
 
-  letterCount = lCount;
   triesCount = tCount;
-  generateInput((tCount = triesCount), (lCount = letterCount));
+  letterCount = lCount;
+  console.log("letterCount when replacing inputs: ", letterCount);
+  generateInput(tCount = triesCount, lCount = letterCount);
+  
+  // todo: remove disabled class from check and hint button
+  const hintBtn = document.querySelector(".hint");
+  guessBtn.classList.remove("disabled");
+  hintBtn.classList.remove("disabled");
+  messageEl.innerHTML = ``;
 }
 
 // check word
@@ -187,7 +198,7 @@ function handleGuesses() {
 
   // Check if user won or lost
   if (successfulGuess) {
-    messageEl.innerHTML = `You succeeded after <span>${currentTry}</span> ${currentTry===1? "try" : "tries"}`
+    messageEl.innerHTML = `You won, <span>Good Job!</span>`;
     
     // add disable class to try inputs
     const allTries = document.querySelectorAll('.inputs > div');
@@ -201,7 +212,6 @@ function handleGuesses() {
     const tries = document.querySelectorAll(".inputs > div");
     // if we aren't in the last try
     if (currentTry !== triesCount) {
-      console.log("not last try");
       // disable the current try
       controlTry(tries[currentTry - 1], disable = true);
       
@@ -209,20 +219,14 @@ function handleGuesses() {
       controlTry(tries[currentTry], disable = false);
       tries[currentTry].children[1].focus();
       currentTry++;
-    }
-    else {
-      console.log("last try");
-      messageEl.innerHTML = `You lost after <span>${currentTry}</span> tries`;
+    } else {
+      messageEl.innerHTML = `You lost, the correct word is <span>${wordToGuess}</span>`;
       controlTry(tries[currentTry-1], disable = true);
       
       // add disable class to try guess btn & hint btn
       guessBtn.classList.add("disabled");
       hintBtn.classList.add("disabled");
     }
-    
-    // add disable class to try guess btn & hint btn
-    guessBtn.classList.add("disabled");
-    hintBtn.classList.add("disabled");
   }
   
 }
