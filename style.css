@@ -128,6 +128,10 @@ body {
   justify-content: space-between;
 }
 
+header, 
+footer {
+  z-index: 2;
+}
 header {
   position: fixed;
   top: 0;
@@ -138,7 +142,6 @@ header {
   grid-template-rows: 1fr;
   padding: 10px 0;
   background-color: var(--color-surface);
-  height: 5rem;
 
   h1 {
     grid-column: 2 / span 1;
@@ -193,28 +196,29 @@ header {
     align-items: center;
     justify-content: center;
     grid-column: 1 / span 1;
-    &:hover {
+    .icon-cont {
+      border-radius: 10px;
+      padding: 2px;
+      &:hover { background-color: #33333340;}
+      &.active { background-color: #33333340; }
+      cursor: pointer;
       .settings-icon {
-        transform: rotate(180deg);
+        width: 45px;
+        color: var(--color-settings-icon);
+        &:focus { outline: none; }
       }
-    }
-    .settings-icon {
-      max-width: 40px;
-      transition: transform 0.5s;
-      color: var(--color-settings-icon);
     }
     .settings-panel {
       top: 100%;
       margin-left: 5rem;
       position: absolute;
-      z-index: 2;
       padding: 10px 20px;
       background-color: white;
       border-radius: 25px;
       min-width: 200px;
       h3 {
         margin: 0;
-        margin-bottom: 2px;
+        margin-bottom: 15px;
       }
       .choice {
         display: flex;
@@ -423,5 +427,6 @@ header {
 }
 
 .displayNone {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
 }
