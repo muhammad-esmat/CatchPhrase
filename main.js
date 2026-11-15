@@ -20,6 +20,8 @@ function syncColorThemeData() {
   colorModeBtn.classList.toggle("darkMode-toggled");
 }
 
+let allTryDivs;
+
 // game options
 let triesCount = 6;
 let maxTriesCount = 6;
@@ -27,7 +29,11 @@ let letterCount = 6;
 let maxLetterCount = 6;
 let currentTry = 1;
 let hintCount = 3;
-let difficultyMap = new Map().set(1, "easy").set(2, "medium").set(3, "hard").set(4, "extreme");
+let difficultyMap = new Map()
+  .set(1, "easy")
+  .set(2, "medium")
+  .set(3, "hard")
+  .set(4, "extreme");
 let difficulty = difficultyMap.get(1);
 
 // manage words
@@ -64,14 +70,12 @@ function chooseWord() {
 const settingsCont = document.querySelector(".settings-cont");
 const settingsIcon = document.querySelector(".settings-icon");
 const settingsIconCont = document.querySelector(".icon-cont");
-const settingsPanel = document.querySelector(
-  ".settings-cont .settings-panel",
-);
+const settingsPanel = document.querySelector(".settings-cont .settings-panel");
 
 settingsPanel.classList.add("displayNone");
 
 settingsIcon.addEventListener("focus", () => {
-  settingsIconCont.classList.add("active")
+  settingsIconCont.classList.add("active");
   settingsPanel.classList.remove("displayNone");
 });
 settingsIcon.addEventListener("blur", () => {
@@ -91,21 +95,38 @@ difficultyChoice.addEventListener("mousedown", (e) => {
   messageEl.innerHTML = ``;
   if (hintBtn.disabled) hintBtn.disabled = false;
   if (guessBtn.disabled) guessBtn.disabled = false;
+  
 
   previousHints = [];
   chooseWord();
   if (e.target.classList.contains("easy")) {
+    hintCount = 3;
+    hintBtn.innerHTML =
+      hintCount === 1
+        ? `<span>${hintCount}</span> hint`
+        : `<span>${hintCount}</span> hints`;
     replaceInput(6, letterCount);
-    hintCount = 3;
   } else if (e.target.classList.contains("medium")) {
-    replaceInput(5, letterCount);
     hintCount = 3;
+    hintBtn.innerHTML =
+      hintCount === 1
+        ? `<span>${hintCount}</span> hint`
+        : `<span>${hintCount}</span> hints`;
+    replaceInput(5, letterCount);
   } else if (e.target.classList.contains("hard")) {
-    replaceInput(4, letterCount);
     hintCount = 2;
+    hintBtn.innerHTML =
+      hintCount === 1
+        ? `<span>${hintCount}</span> hint`
+        : `<span>${hintCount}</span> hints`;
+    replaceInput(4, letterCount);
   } else if (e.target.classList.contains("extreme")) {
-    replaceInput(3, letterCount);
     hintCount = 1;
+    hintBtn.innerHTML =
+      hintCount === 1
+        ? `<span>${hintCount}</span> hint`
+        : `<span>${hintCount}</span> hints`;
+    replaceInput(3, letterCount);
   }
 
   hintBtn.children[0].innerHTML = hintCount;
@@ -143,6 +164,8 @@ function generateInput(tCount, lCount) {
     input.disabled = true;
   });
 
+  allTryDivs = document.querySelectorAll(".inputs > div");
+
   const inputs = document.querySelectorAll(".inputs input");
   inputs.forEach((input, index) => {
     // event input only detects characters and symbols (no special keys) (detects when a character is changed (can detect 'Backspace' or 'Delete' if a character is changed))
@@ -162,7 +185,7 @@ function generateInput(tCount, lCount) {
       const nextIndex = currentIndex + 1;
       const enteredChar = String.fromCharCode(e.keyCode);
       const keyIsAlphabetical = /^[A-Za-z]+$/.test(enteredChar);
-      
+
       if (keyIsAlphabetical) {
         e.preventDefault();
         input.value = enteredChar.toLowerCase();
@@ -174,8 +197,7 @@ function generateInput(tCount, lCount) {
       } else if (e.key === "Backspace") {
         e.preventDefault();
         input.value = "";
-        if (inputs[prevIndex]) 
-          inputs[prevIndex].focus();
+        if (inputs[prevIndex]) inputs[prevIndex].focus();
       } else if (e.key === " ") {
         input.value = "";
       } else if (e.key === "Enter") {
@@ -189,8 +211,7 @@ function generateInput(tCount, lCount) {
 
 // replace inputs
 function replaceInput(tCount, lCount) {
-  const inputsCont = document.querySelectorAll(".inputs > div");
-  inputsCont.forEach((div) => {
+  allTryDivs.forEach((div) => {
     div.remove();
   });
 
@@ -229,12 +250,11 @@ function handleGuesses() {
   // Check if user won or lost
   if (successfulGuess) {
     if (hintCount === 3)
-      messageEl.innerHTML = `0 hints?! <span>Keep it up!</span>`;
+      messageEl.innerHTML = `0 hints?? You're good at this .. <span>Keep it up!</span>`;
     else messageEl.innerHTML = `You won, <span>Good Job!</span>`;
 
-    // disable tries 
-    const allTries = document.querySelectorAll(".inputs > div");
-    allTries.forEach((tryDiv) => {
+    // disable tries
+    allTryDivs.forEach((tryDiv) => {
       controlTry(tryDiv, (disable = true));
     });
   } else {
@@ -251,7 +271,7 @@ function handleGuesses() {
       currentTry++;
     } else {
       messageEl.innerHTML = `You lost, the correct word is <span>${wordToGuess}</span>`;
-      
+
       // add disable class to try guess btn & hint btn
       guessBtn.disabled = true;
       hintBtn.disabled = true;
@@ -279,19 +299,18 @@ function showHint() {
     hintBtn.disabled = true;
   }
 
-  const tryInputs = document.querySelectorAll(`.try-${currentTry} input`);
   /* (Elzero's) const enabledInputs = document.querySelectorAll(".inputs input:not([disabled])");
     we used this instead of Elzero's way because his way assumes all enabled inputs will be in current try
     my approach includes disabling hint inputs so his way will not count 'hint' inputs causing variable 'enabledInputs' to not be in line with wordToGuess indexing
     so in order to have inputs indexes in line with word to guess i had to count all inputs in this try even if they are disabled
   */
 
-  const validHintInputs = Array.from(tryInputs).filter((input, index) => {
-    return (
-      input.value == "" && !input.disabled && !previousHints.includes(index)
-    );
+  const currentInputs = Array.from(allTryDivs[currentTry - 1].children).slice(1);
+  const validHintInputs = currentInputs.filter((el, index) => {
+    console.log(index);
+    return el.value == "" && !el.disabled && !previousHints.includes(index);
   });
-
+  console.log(validHintInputs);
   // console.log(tryInputs);
   // console.log(emptyEnabledInputs);
 
@@ -310,7 +329,8 @@ function showHint() {
   if (validHintInputs.length > 0) {
     let randomIndex = Math.floor(Math.random() * validHintInputs.length);
     let randomInput = validHintInputs[randomIndex];
-    let indexToFill = Array.from(tryInputs).indexOf(randomInput);
+    let indexToFill = currentInputs.indexOf(randomInput);
+    console.log(randomInput);
     // console.log("randomIndex: ", randomIndex);
     // console.log("randomInput: ", randomInput);
     // console.log("wordToGuess[indexToFill]: ",wordToGuess[indexToFill]);
@@ -339,9 +359,7 @@ function controlTry(inputDiv, disable) {
     }
   }
 }
-// todo(after course): make a global var for all tries (.inputs > div) bc we use it a lot
 
-// document.addEventListener("DOMContentLoaded", listener)
 document.addEventListener("DOMContentLoaded", () => {
   chooseWord();
   // console.log("letterCount when content loaded: ", letterCount);
