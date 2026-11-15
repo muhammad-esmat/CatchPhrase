@@ -289,21 +289,19 @@ function showHint() {
     let indexToFill = Array.from(tryInputs).indexOf(randomInput);
     // console.log("randomIndex: ", randomIndex);
     // console.log("randomInput: ", randomInput);
-    // console.log("indexToFill: ", indexToFill);
-    // console.log("previousHints: ",previousHints);
-    /*
-      while (previousHints.includes(indexToFill)) {
-        randomIndex = Math.floor(Math.random() * emptyEnabledInputs.length);
-        randomInput = emptyEnabledInputs[randomIndex];
-        indexToFill = Array.from(tryInputs).indexOf(randomInput);
-      }
-    */
-    
-    if (indexToFill !== -1) {
+    // console.log("wordToGuess[indexToFill]: ",wordToGuess[indexToFill]);
+    console.log("indexToFill: ", indexToFill);
+    console.log("previousHints: ",previousHints);
+    console.log("previousHints includes indexToFill: ",previousHints.includes(indexToFill));
+    while (previousHints.includes(indexToFill) || indexToFill === -1) {
+      randomIndex = Math.floor(Math.random() * emptyEnabledInputs.length);
+      randomInput = emptyEnabledInputs[randomIndex];
+      indexToFill = Array.from(tryInputs).indexOf(randomInput);
+    }
+    if (!previousHints.includes(indexToFill) && indexToFill !== -1) {
       previousHints.push(indexToFill);
       randomInput.value = wordToGuess[indexToFill];
       randomInput.disabled = true;
-      // console.log("wordToGuess[indexToFill]: ",wordToGuess[indexToFill]);
     }
   }
 }
