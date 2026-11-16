@@ -6,6 +6,16 @@
 
 :root {
   --mode-toggle-ball-radius: 20px;
+  
+  --background-color-settings-icon-cont: #f5f5f5;
+  --background-settings-panel: #f5f5f5;
+  --color-settings-panel:  #333;
+
+  --background-difficulty-btn: #fff;
+  --background-difficulty-btn-selected: #2563EB;
+  --background-difficulty-btn-hover: #E8EFFB;
+  --border-difficulty-btn: 	#D1D5DB;
+  
 
   /* Backgrounds */
   --color-background: #f5f5f5;
@@ -49,9 +59,9 @@
 
   --color-settings-icon: black;
   
-  --color-settings-btn: #656565;
   --background-color-settings-button-hover: #80808070;
 
+  /*--color-*/
   --border-bottom-inputs: #333;
   --text-color-inputs: #333;
   
@@ -64,6 +74,16 @@
   
 }
 [data-theme="dark"] {
+  --background-color-settings-icon-cont: #a39c9c3b;
+  --background-settings-panel: #1E293B;
+  --color-settings-panel:  #F1F5F9;
+
+  --background-difficulty-btn: #334155;
+  --background-difficulty-btn-selected: #2563EB;
+  --background-difficulty-btn-hover: #475569;
+
+  --border-difficulty-btn: 	#475569;
+  
   /* Backgrounds */
   --color-background: #0f172a;
   --color-surface: #1e293b;
@@ -199,8 +219,9 @@ header {
     .icon-cont {
       border-radius: 10px;
       padding: 2px;
-      &:hover { background-color: #33333340;}
-      &.active { background-color: #33333340; }
+      /*#a39c9c3b*/
+      &:hover { background-color: var(--background-color-settings-icon-cont);}
+      &.active { background-color: var(--background-color-settings-icon-cont); }
       cursor: pointer;
       .settings-icon {
         width: 45px;
@@ -213,7 +234,8 @@ header {
       margin-left: 5rem;
       position: absolute;
       padding: 10px 20px;
-      background-color: white;
+      background-color: var(--background-settings-panel);
+      color: var(--color-settings-panel);
       border-radius: 25px;
       min-width: 200px;
       h3 {
@@ -225,15 +247,21 @@ header {
         gap: 8px;
         button {
           border: none;
-          color: var(--color-settings-btn);
+          background-color: var(--background-difficulty-btn);
+          color: inherit;
+          border: 2px solid var(--border-difficulty-btn);
           cursor: pointer;
           border-radius: 5px;
           padding: 5px;
           &:hover {
-            background-color: var(--background-color-settings-button-hover);
+            background-color: var(--background-difficulty-btn-hover);
           }
           &:last-child {
             font-weight: bold;
+          }
+          &.selected {
+            color: #f5f5f5;
+            background-color: var(--background-difficulty-btn-selected);
           }
         }
       }
