@@ -166,10 +166,20 @@ header {
   padding: 10px 0;
   background-color: var(--color-surface);
 
-  h1 {
-    grid-column: 2 / span 1;
-    font-size: 1.8rem;
+  .title-cont {
     text-align: center;
+    grid-column: 2 / span 1;
+    margin: .5rem 0;
+    .Title {
+      text-align: center;
+      font-size: 1.8rem;
+      margin: .2rem 0;
+    }
+    span {
+      display: inline-block;
+      text-align: center;
+      color: var(--color-text-secondary);
+    }
   }
   .darkMode-cont {
     grid-column: 3 / span 1;

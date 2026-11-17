@@ -1,5 +1,5 @@
 // game name title
-let gameName = "Guess The Word";
+let gameName = "CatchPhrase";
 document.title = gameName;
 document.querySelector("h1").innerHTML = gameName;
 document.querySelector("footer").innerHTML =
