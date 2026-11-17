@@ -137,6 +137,9 @@
   --color-toggle-circle: #10b981;
   --color-toggle-circle-hover: #34d399;
 }
+.displayNone {
+  display: none !important;
+}
 
 body {
   margin: 0;
@@ -269,176 +272,198 @@ header {
   }
 }
 
-.guess-game {
+main.guess-game {
   text-align: center;
   margin: calc(7rem) auto;
   padding: 20px 30px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 2fr;
+  grid-template-rows: auto 1fr;
   align-items: flex-start;
   width: 1000px;
   
-  .game-area {
-    text-align: center;
-    .inputs {
-      & > div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-        gap: 10px;
-        span {
-          font-size: 2rem;
-          margin-right: 15px;
-          font-weight: bold;
-        }
-        input {
-          width: 50px;
-          height: 50px;
-          border-radius: 10px;
-          font-size: 2rem;
-          text-align: center;
-          border: none;
-          border-bottom: 3px solid var(--border-bottom-inputs);
-         
-          /* to hide the cursor caret */
-          color: transparent;
-          text-shadow: 0 0 0 var(--text-color-inputs);
-          
-          &:focus {
-            outline: 2px solid #ccc;
-          }
-
-          &.in-place,
-          &.not-in-place,
-          &.wrong {
-            color: white;
-          }
-          &.in-place {
-            background-color: var(--color-tile-correctIP);
-          }
-          &.not-in-place {
-            background-color: var(--color-tile-correct);
-          }
-          &.wrong {
-            background-color: var(--color-tile-wrong);
-          }
-        }
-      }
-      .disable-input {
-        opacity: 0.5;
-        pointer-events: none;
-      }
-    }
-    
-    .control {
-      margin-top: 1.875rem;
-      display: flex;
-      .check,
-      .hint {
-        border-radius: 15px;
-        margin: 0 10px;
-        font-size: 1.2rem;
-        padding: 15px 35px;
-        text-align: center;
-        vertical-align: middle;
-        cursor: pointer;
-        transition: background-color .2s;
-      }
-      .check {
-        flex: 1;
-        border: none;
-        background-color: var(--background-color-button-check);
-        &:hover {
-          background-color: var(--background-color-button-check-hover);
-        }
-        color: var(--color-button-check);
-        svg {
-          color: var(--color-button-check);
-        }
-      }
-      .hint {
-        width: fit-content;
-        border: 0.1rem solid var(--color-button-hint);
-        background-color: var(--background-color-button-hint);
-        color: var(--color-button-hint);
-        &:hover {
-          background-color: var(--background-color-button-hint-hover);
-        }
-      }
-      .check[disabled],
-      .hint[disabled] {
-        pointer-events: none;
-        cursor: not-allowed;
-        opacity: 0.5;
-      }
-      .check[disabled] {
-        background-color: #333;
-      }
-      .hint[disabled] {
-        border-color: #333;
-        color: #333;
-        & > svg {
-          color: #333;
-        }
-      }
-    }
-    .check svg,
-    .hint svg {
-      vertical-align: top;
-      width: 20px;
-    }
+  .message-cont {
+    margin-bottom: 2rem;
     .message {
-      margin-top: 2rem;
+      grid-column: 1/ span 1;
+      margin-bottom: .5rem;
       text-align: center;
       font-weight: bold;
       font-size: 30px;
       span {
         font-weight: bold;
-        display: block;
         font-size: 50px;
         color: var(--primary-color);
         text-transform: capitalize;
-        margin-top: 10px; 
+        margin-bottom: 10px; 
       }
       p {
-        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+    };
+    .reload {
+      cursor: pointer;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 15px;
+      font-weight: 600;
+      background-color: var(--color-button-secondary);
+      color: #fff;
+      &:hover {
+        background-color: var(--color-button-secondary-hover);
       }
     }
   }
-  .key-colors {
+  
+  .game-area  {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    .input-area {
+      text-align: center;
+      .inputs {
+        & > div {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-bottom: 20px;
+          gap: 10px;
+          span {
+            font-size: 2rem;
+            margin-right: 15px;
+            font-weight: bold;
+          }
+          input {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            font-size: 2rem;
+            text-align: center;
+            border: none;
+            border-bottom: 3px solid var(--border-bottom-inputs);
+           
+            /* to hide the cursor caret */
+            color: transparent;
+            text-shadow: 0 0 0 var(--text-color-inputs);
+            
+            &:focus {
+              outline: 2px solid #ccc;
+            }
   
-    .key-color {
-      display: flex;
-      align-items: center;
-      padding: 15px;
-      background-color: var(--color-surface);
-  
-      .key {
-        width: 50px;
-        height: 50px;
-        border-radius: 15px;
-        margin-right: 10px;
-  
-        &.in-place {
-          background-color: var(--color-tile-correctIP);
+            &.in-place,
+            &.not-in-place,
+            &.wrong {
+              color: white;
+            }
+            &.in-place {
+              background-color: var(--color-tile-correctIP);
+            }
+            &.not-in-place {
+              background-color: var(--color-tile-correct);
+            }
+            &.wrong {
+              background-color: var(--color-tile-wrong);
+            }
+          }
         }
-  
-        &.not-in-place {
-          background-color: var(--color-tile-correct);
-        }
-  
-        &.wrong {
-          background-color: var(--color-tile-wrong);
+        .disable-input {
+          opacity: 0.5;
+          pointer-events: none;
         }
       }
-  
-      .key-text {
-        font-size: 1.2rem;
-        font-weight: bold;
+      
+      .control {
+        margin-top: 1.875rem;
+        display: flex;
+        .check,
+        .hint {
+          border-radius: 15px;
+          margin: 0 10px;
+          font-size: 1.2rem;
+          padding: 15px 35px;
+          text-align: center;
+          vertical-align: middle;
+          cursor: pointer;
+          transition: background-color .2s;
+        }
+        .check {
+          flex: 1;
+          border: none;
+          background-color: var(--background-color-button-check);
+          &:hover {
+            background-color: var(--background-color-button-check-hover);
+          }
+          color: var(--color-button-check);
+          svg {
+            color: var(--color-button-check);
+          }
+        }
+        .hint {
+          width: fit-content;
+          border: 0.1rem solid var(--color-button-hint);
+          background-color: var(--background-color-button-hint);
+          color: var(--color-button-hint);
+          &:hover {
+            background-color: var(--background-color-button-hint-hover);
+          }
+        }
+        .check[disabled],
+        .hint[disabled] {
+          pointer-events: none;
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+        .check[disabled] {
+          background-color: #333;
+        }
+        .hint[disabled] {
+          border-color: #333;
+          color: #333;
+          & > svg {
+            color: #333;
+          }
+        }
+      }
+      .check svg,
+      .hint svg {
+        vertical-align: top;
+        width: 20px;
+      }
+    }
+    .key-colors {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    
+      .key-color {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background-color: var(--color-surface);
+    
+        .key {
+          width: 50px;
+          height: 50px;
+          border-radius: 15px;
+          margin-right: 10px;
+    
+          &.in-place {
+            background-color: var(--color-tile-correctIP);
+          }
+    
+          &.not-in-place {
+            background-color: var(--color-tile-correct);
+          }
+    
+          &.wrong {
+            background-color: var(--color-tile-wrong);
+          }
+        }
+    
+        .key-text {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
       }
     }
   }
@@ -454,7 +479,3 @@ header {
   text-align: center;
 }
 
-.displayNone {
-  opacity: 0;
-  pointer-events: none;
-}

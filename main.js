@@ -19,37 +19,63 @@ function syncColorThemeData() {
   document.body.setAttribute("data-theme", currentColorMode);
   colorModeBtn.classList.toggle("darkMode-toggled");
 }
-
 let allTryDivs;
 
 // game options
-let triesCount = 6;
 let maxTriesCount = 6;
-let letterCount = 6;
 let maxLetterCount = 6;
 let currentTry = 1;
-let hintCount = 3;
+let triesCount, letterCount, hintCount;
 let difficultyMap = new Map()
-  .set(1, "easy")
-  .set(2, "medium")
-  .set(3, "hard")
-  .set(4, "extreme");
+  .set(0, "easy")
+  .set(1, "medium")
+  .set(2, "hard")
+  .set(3, "extreme");
 let difficulty = difficultyMap.get(1);
+console.log(difficulty);
+
+if (difficulty === "easy") {
+  triesCount = 6;
+  hintCount = 3;
+} else if (difficulty === "medium") {
+  triesCount = 5;
+  hintCount = 3;
+} else if (difficulty === "hard") {
+  triesCount = 4;
+  hintCount = 2;
+} else if (difficulty === "extreme") {
+  triesCount = 3;
+  hintCount = 1;
+}
 
 // manage words
-let wordToGuess = "";
+let wordToGuess;
 let words = new Map();
-words.set(4, ["cake", "wake", "plus", "zero", "rust", "iron"]);
-words.set(5, ["break", "phone", "bread", "whale", "shark", "awake"]);
+words.set(4, [
+  {text: "plus", category: "mathematical sign"},
+  {text: "zero", category: "number"},
+  {text: "java", category: "programming language"},
+  {text: "rust", category: "programming language"},
+  {text: "iron", category: "element"},
+]);
+words.set(5, [
+  {text: "phone", category: "smart device"},
+  {text: "bread", category: "food"},
+  {text: "whale", category: "marine animal"},
+  {text: "minus", category: "mathematical sign"},
+  {text: "chips", category: "snack"},
+  {text: "night", category: "time"},
+  {text: "swift", category: "programming language"},
+]);
 words.set(6, [
-  "Elzero",
-  "choose",
-  "Coffee",
-  "School",
-  "Python",
-  "Pencil",
-  "Banana",
-  "Carrot",
+  {text: "elzero", category: "qudwa"},
+  {text: "coffee", category: "drink"},
+  {text: "jaguar", category: "animal"},
+  {text: "school", category: "place"},
+  {text: "python", category: "programming language"},
+  {text: "pencil", category: "writing tool"},
+  {text: "banana", category: "fruit"},
+  {text: "carrot", category: "fruit"},
 ]);
 
 function chooseWord() {
@@ -60,9 +86,8 @@ function chooseWord() {
   const wordArr = words.get(letterCount);
 
   // console.log(words.get(letterCount));
-  wordToGuess =
-    wordArr[Math.floor(Math.random() * wordArr.length)].toLowerCase();
-
+  wordToGuess = wordArr[Math.floor(Math.random() * wordArr.length)];
+  
   console.log(wordToGuess);
 }
 
@@ -83,54 +108,92 @@ settingsIcon.addEventListener("blur", () => {
   settingsPanel.classList.add("displayNone");
 });
 
-// diffiuculty settings
-const difficultyChoice = document.querySelector(
+// difficulty
+const difficultyBtns = document.querySelectorAll(".choice button");
+const difficultySettingCont = document.querySelector(
   ".settings-cont .settings-panel .choice",
 );
-difficultyChoice.addEventListener("mousedown", (e) => {
-  e.stopPropagation();
+// make difficulty button have 'selected' class
+function syncDifficultyBtns() {
+  difficultyBtns.forEach((btn, index) => {
+    console.log(btn.classList);
+    console.log(difficultyMap.get(index));
+    if (btn.classList.contains(difficulty)) {
+      btn.classList.add("selected");
+    } else if (btn.classList.contains("selected")) {
+      btn.classList.remove("selected");
+    }
+  });
+}
+syncDifficultyBtns();
 
+const hintBtn = document.querySelector(".hint");
+function setHintCount() {
+  if (difficulty === "easy") {
+    hintCount = 3;
+  } else if (difficulty === "medium") {
+    hintCount = 3;
+  } else if (difficulty === "hard") {
+    hintCount = 2;
+  } else if (difficulty === "extreme") {
+    hintCount = 1;
+  }
+
+  hintBtn.innerHTML =
+    hintCount === 1
+      ? `<span>${hintCount}</span> hint`
+      : `<span>${hintCount}</span> hints`;
+}
+setHintCount();
+
+function setTriesCount() {
+  if (difficulty === "easy") {
+    triesCount = 6;
+  } else if (difficulty === "medium") {
+    triesCount = 5;
+  } else if (difficulty === "hard") {
+    triesCount = 4;
+  } else if (difficulty === "extreme") {
+    triesCount = 3;
+  }
+}
+setTriesCount();
+
+// diffiuculty settings
+difficultySettingCont.addEventListener("mousedown", (e) => {
+  if (e.target.classList.contains("easy")) {
+    difficulty = "easy";
+  } else if (e.target.classList.contains("medium")) {
+    difficulty = "medium";
+  } else if (e.target.classList.contains("hard")) {
+    difficulty = "hard";
+  } else if (e.target.classList.contains("extreme")) {
+    difficulty = "extreme";
+  }
+  
+  reloadGame()
+});
+function reloadGame() {
   // reset state variables
+  reloadBtn.classList.add("displayNone");
+  
   currentTry = 1;
-  messageEl.innerHTML = ``;
   if (hintBtn.disabled) hintBtn.disabled = false;
   if (guessBtn.disabled) guessBtn.disabled = false;
   
-
   previousHints = [];
   chooseWord();
-  if (e.target.classList.contains("easy")) {
-    hintCount = 3;
-    hintBtn.innerHTML =
-      hintCount === 1
-        ? `<span>${hintCount}</span> hint`
-        : `<span>${hintCount}</span> hints`;
-    replaceInput(6, letterCount);
-  } else if (e.target.classList.contains("medium")) {
-    hintCount = 3;
-    hintBtn.innerHTML =
-      hintCount === 1
-        ? `<span>${hintCount}</span> hint`
-        : `<span>${hintCount}</span> hints`;
-    replaceInput(5, letterCount);
-  } else if (e.target.classList.contains("hard")) {
-    hintCount = 2;
-    hintBtn.innerHTML =
-      hintCount === 1
-        ? `<span>${hintCount}</span> hint`
-        : `<span>${hintCount}</span> hints`;
-    replaceInput(4, letterCount);
-  } else if (e.target.classList.contains("extreme")) {
-    hintCount = 1;
-    hintBtn.innerHTML =
-      hintCount === 1
-        ? `<span>${hintCount}</span> hint`
-        : `<span>${hintCount}</span> hints`;
-    replaceInput(3, letterCount);
-  }
+  messageEl.innerHTML = `It's a: <span>${wordToGuess.category}</span>`;
+  
+  setHintCount();
+  syncDifficultyBtns();
+  setTriesCount();
+  replaceInput(triesCount, letterCount);
+}
 
-  hintBtn.children[0].innerHTML = hintCount;
-});
+const reloadBtn = document.querySelector(".reload");
+reloadBtn.addEventListener("click", reloadGame);
+reloadBtn.classList.add("displayNone");
 
 // generate inputs
 function generateInput(tCount, lCount) {
@@ -163,8 +226,6 @@ function generateInput(tCount, lCount) {
   document.querySelectorAll(".disable-input input").forEach((input) => {
     input.disabled = true;
   });
-
-  allTryDivs = document.querySelectorAll(".inputs > div");
 
   const inputs = document.querySelectorAll(".inputs input");
   inputs.forEach((input, index) => {
@@ -207,6 +268,8 @@ function generateInput(tCount, lCount) {
       }
     });
   });
+
+  allTryDivs = document.querySelectorAll(".inputs > div");
 }
 
 // replace inputs
@@ -224,7 +287,6 @@ function replaceInput(tCount, lCount) {
 
 // check word
 const guessBtn = document.querySelector(".check");
-const hintBtn = document.querySelector(".hint");
 const messageEl = document.querySelector(".message");
 
 guessBtn.addEventListener("click", handleGuesses);
@@ -235,10 +297,10 @@ function handleGuesses() {
     // console.log(currentTry, i);
     let inputField = document.querySelector(`#guess-${currentTry}-letter-${i}`);
     let enteredLetter = inputField.value.toLowerCase();
-    let correctLetter = wordToGuess[i - 1];
+    let correctLetter = wordToGuess.text[i - 1];
     if (enteredLetter === correctLetter) {
       inputField.classList.add("in-place");
-    } else if (wordToGuess.includes(enteredLetter) && enteredLetter !== "") {
+    } else if (wordToGuess.text.includes(enteredLetter) && enteredLetter !== "") {
       inputField.classList.add("not-in-place");
       successfulGuess = false;
     } else {
@@ -257,6 +319,11 @@ function handleGuesses() {
     allTryDivs.forEach((tryDiv) => {
       controlTry(tryDiv, (disable = true));
     });
+
+    hintBtn.disabled = true;
+    guessBtn.disabled = true;
+    reloadBtn.classList.remove("displayNone");
+    reloadBtn.innerHTML = "Crush it again?";
   } else {
     let currentTryDiv = document.querySelector(`.try-${currentTry}`);
     // disable the current try
@@ -270,19 +337,17 @@ function handleGuesses() {
       nextTryDiv.children[1].focus();
       currentTry++;
     } else {
-      messageEl.innerHTML = `You lost, the correct word is <span>${wordToGuess}</span>`;
+      messageEl.innerHTML = `You lost, the correct word is <span>${wordToGuess.text}</span>`;
 
-      // add disable class to try guess btn & hint btn
+      // disable guess btn & hint btn
       guessBtn.disabled = true;
       hintBtn.disabled = true;
+      reloadBtn.classList.remove("displayNone");
+      reloadBtn.innerHTML = "Try again?";
     }
   }
 }
 
-hintBtn.innerHTML =
-  hintCount === 1
-    ? `<span>${hintCount}</span> hint`
-    : `<span>${hintCount}</span> hints`;
 hintBtn.addEventListener("click", showHint);
 let previousHints = [];
 function showHint() {
@@ -295,7 +360,6 @@ function showHint() {
         : `<span>${hintCount}</span> hints`;
   }
   if (hintCount === 0) {
-    hintBtn.classList.add("disabled");
     hintBtn.disabled = true;
   }
 
@@ -305,7 +369,9 @@ function showHint() {
     so in order to have inputs indexes in line with word to guess i had to count all inputs in this try even if they are disabled
   */
 
-  const currentInputs = Array.from(allTryDivs[currentTry - 1].children).slice(1);
+  const currentInputs = Array.from(allTryDivs[currentTry - 1].children).slice(
+    1,
+  );
   const validHintInputs = currentInputs.filter((el, index) => {
     console.log(index);
     return el.value == "" && !el.disabled && !previousHints.includes(index);
@@ -337,7 +403,7 @@ function showHint() {
     // console.log("indexToFill: ", indexToFill);
     // console.log("previousHints: ",previousHints);
     previousHints.push(indexToFill);
-    randomInput.value = wordToGuess[indexToFill];
+    randomInput.value = wordToGuess.text[indexToFill];
     randomInput.disabled = true;
   }
 }
@@ -362,6 +428,8 @@ function controlTry(inputDiv, disable) {
 
 document.addEventListener("DOMContentLoaded", () => {
   chooseWord();
+  messageEl.innerHTML = `It's a: <span>${wordToGuess.category}</span>`;
+
   // console.log("letterCount when content loaded: ", letterCount);
   generateInput((tCount = triesCount), (lCount = letterCount));
 });
