@@ -32,7 +32,7 @@
   --color-tile-empty: #ffffff;
   --color-tile-empty-hover: #f3f4f6;
 
-  --color-tile-wrong: #374151;
+  --color-tile-wrong: #777;
 
   --color-tile-correct: #f59e0b;
 
@@ -300,12 +300,14 @@ main.guess-game {
       text-align: center;
       font-weight: bold;
       font-size: 30px;
+      color: var(--color-text-secondary);
       span {
         font-weight: bold;
         font-size: 50px;
         color: var(--primary-color);
         text-transform: capitalize;
         margin-bottom: 10px; 
+        color: var(--color-text-primary);
       }
       p {
         margin-bottom: 15px;
@@ -487,5 +489,10 @@ main.guess-game {
   background-color: #333;
   color: #fff;
   text-align: center;
+  .footer-link {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+  }
 }
 

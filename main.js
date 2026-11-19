@@ -2,8 +2,14 @@
 let gameName = "CatchPhrase";
 document.title = gameName;
 document.querySelector("h1").innerHTML = gameName;
+const myProfileLink = document.createElement("a");
+myProfileLink.innerHTML = "Muhammad Esmat";
+myProfileLink.setAttribute("href", "https://github.com/muhammad-esmat");
+myProfileLink.classList.add("footer-link");
+myProfileLink.setAttribute("target", "_blank");
 document.querySelector("footer").innerHTML =
-  `Created By Elzero Web school, improved by Muhammad Esmat`;
+  `Created By Elzero Web school, improved by `;
+document.querySelector("footer").appendChild(myProfileLink);
 
 // dark mode toggle
 const colorModeBtn = document.querySelector(".darkMode-btn");
@@ -50,46 +56,52 @@ if (difficulty === "easy") {
 
 // manage words
 let wordToGuess;
-let words = new Map();
-words.set(4, [
-  {text: "plus", category: "mathematical sign"},
-  {text: "zero", category: "number"},
-  {text: "java", category: "programming language"},
-  {text: "rust", category: "programming language"},
-  {text: "iron", category: "element"},
-]);
-words.set(5, [
-  {text: "phone", category: "smart device"},
-  {text: "bread", category: "food"},
-  {text: "whale", category: "marine animal"},
-  {text: "minus", category: "mathematical sign"},
-  {text: "chips", category: "snack"},
-  {text: "night", category: "time"},
-  {text: "swift", category: "programming language"},
-]);
-words.set(6, [
-  {text: "elzero", category: "qudwa"},
-  {text: "coffee", category: "drink"},
-  {text: "jaguar", category: "animal"},
-  {text: "school", category: "place"},
-  {text: "python", category: "programming language"},
-  {text: "pencil", category: "writing tool"},
-  {text: "banana", category: "fruit"},
-  {text: "carrot", category: "fruit"},
-]);
+let words = [
+  // of 4 letters
+  { text: "plus", categoryArticle: "a", category: "mathematical operator" },
+  { text: "zero", categoryArticle: "a", category: "number" },
+  { text: "java", categoryArticle: "a", category: "programming language" },
+  { text: "fish", categoryArticle: "a", category: "marine animal" },
+  { text: "iron", categoryArticle: "a", category: "chemical element" },
+  { text: "nine", categoryArticle: "a", category: "number" },
+  { text: "milk", categoryArticle: "a", category: "beverage" },
+  { text: "wolf", categoryArticle: "a", category: "wild animal" },
+  { text: "bear", categoryArticle: "a", category: "wild animal" },
+
+  // of 5 letters
+  { text: "shark", categoryArticle: "a", category: "marine animal" },
+  { text: "minus", categoryArticle: "a", category: "mathematical operator" },
+  { text: "candy", categoryArticle: "a", category: "snack" },
+  { text: "swift", categoryArticle: "a", category: "programming language" },
+  { text: "seven", categoryArticle: "a", category: "number" },
+  { text: "juice", categoryArticle: "a", category: "beverage" },
+  { text: "tiger", categoryArticle: "a", category: "wild animal" },
+  { text: "angry", categoryArticle: "an", category: "adjective" },
+  { text: "brave", categoryArticle: "an", category: "adjective" },
+
+  // of 6 letters
+  { text: "divide", categoryArticle: "a", category: "mathematical operator" },
+  { text: "jaguar", categoryArticle: "an", category: "wild animal" },
+  { text: "castle", categoryArticle: "a", category: "place" },
+  { text: "shrimp", categoryArticle: "a", category: "marine animal" },
+  { text: "eleven", categoryArticle: "a", category: "number" },
+  { text: "boring", categoryArticle: "an", category: "adjective" },
+  { text: "palace", categoryArticle: "a", category: "place" },
+  { text: "python", categoryArticle: "a", category: "programming language"},
+  { text: "clever", categoryArticle: "an", category: "adjective" },
+];
 
 function chooseWord() {
   /* Math.Random() returns [0.0, 1.0), can never return 1.0
     Math.Random() * 3 returns [0.0, 3.0) can never return 3.0 only less than 3.0 */
-  letterCount = [4, 5, 6][Math.floor(Math.random() * 3)];
-  // console.log("letterCount when choosing letter", letterCount);
-  const wordArr = words.get(letterCount);
+  wordToGuess = words[Math.floor(Math.random() * words.length)];
+  letterCount = wordToGuess.text.length;
 
-  // console.log(words.get(letterCount));
-  wordToGuess = wordArr[Math.floor(Math.random() * wordArr.length)];
-  
   console.log(wordToGuess);
 }
+chooseWord();
+const messageEl = document.querySelector(".message");
+messageEl.innerHTML = `It's ${wordToGuess.categoryArticle} <span>${wordToGuess.category}</span>`;
 
 // settings icon
 const settingsCont = document.querySelector(".settings-cont");
@@ -116,8 +128,8 @@ const difficultySettingCont = document.querySelector(
 // make difficulty button have 'selected' class
 function syncDifficultyBtns() {
   difficultyBtns.forEach((btn, index) => {
-    console.log(btn.classList);
-    console.log(difficultyMap.get(index));
+    // console.log(btn.classList);
+    // console.log(difficultyMap.get(index));
     if (btn.classList.contains(difficulty)) {
       btn.classList.add("selected");
     } else if (btn.classList.contains("selected")) {
@@ -170,21 +182,21 @@ difficultySettingCont.addEventListener("mousedown", (e) => {
   } else if (e.target.classList.contains("extreme")) {
     difficulty = "extreme";
   }
-  
-  reloadGame()
+
+  reloadGame();
 });
 function reloadGame() {
   // reset state variables
   reloadBtn.classList.add("displayNone");
-  
+
   currentTry = 1;
   if (hintBtn.disabled) hintBtn.disabled = false;
   if (guessBtn.disabled) guessBtn.disabled = false;
-  
+
   previousHints = [];
   chooseWord();
-  messageEl.innerHTML = `It's a: <span>${wordToGuess.category}</span>`;
-  
+  messageEl.innerHTML = `It's ${wordToGuess.categoryArticle} <span>${wordToGuess.category}</span>`;
+
   setHintCount();
   syncDifficultyBtns();
   setTriesCount();
@@ -260,9 +272,7 @@ function generateInput(tCount, lCount) {
         input.value = "";
         if (inputs[prevIndex]) inputs[prevIndex].focus();
       } else if (e.key === " ") {
-        input.value = "";
-      } else if (e.key === "Enter") {
-        handleGuesses();
+        if (inputs[nextIndex]) inputs[nextIndex].focus();
       } else {
         e.preventDefault();
       }
@@ -272,6 +282,11 @@ function generateInput(tCount, lCount) {
   allTryDivs = document.querySelectorAll(".inputs > div");
 }
 
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    handleGuesses();
+  }
+});
 // replace inputs
 function replaceInput(tCount, lCount) {
   allTryDivs.forEach((div) => {
@@ -287,20 +302,37 @@ function replaceInput(tCount, lCount) {
 
 // check word
 const guessBtn = document.querySelector(".check");
-const messageEl = document.querySelector(".message");
 
 guessBtn.addEventListener("click", handleGuesses);
+
+function countIn(countedIn, val) {
+  let count = 0;
+  for (let i = 0; i < countedIn.length; i++) {
+    if (countedIn[i] === val) count++;
+  }
+  return count;
+}
 function handleGuesses() {
+  let enteredLetters = [];
   let successfulGuess = true;
+  const wordToGuessArr = Array.from(wordToGuess);
   // console.log("letterCount in handleGuesses: ", letterCount);
   for (let i = 1; i <= letterCount; i++) {
     // console.log(currentTry, i);
     let inputField = document.querySelector(`#guess-${currentTry}-letter-${i}`);
     let enteredLetter = inputField.value.toLowerCase();
     let correctLetter = wordToGuess.text[i - 1];
+    enteredLetters.push(enteredLetter);
     if (enteredLetter === correctLetter) {
       inputField.classList.add("in-place");
-    } else if (wordToGuess.text.includes(enteredLetter) && enteredLetter !== "") {
+    } else if (
+      !(
+        countIn(wordToGuess, enteredLetter) <
+        countIn(enteredLetters, enteredLetter)
+      ) &&
+      wordToGuess.text.includes(enteredLetter) &&
+      enteredLetter !== ""
+    ) {
       inputField.classList.add("not-in-place");
       successfulGuess = false;
     } else {
@@ -351,18 +383,6 @@ function handleGuesses() {
 hintBtn.addEventListener("click", showHint);
 let previousHints = [];
 function showHint() {
-  console.log(hintCount);
-  if (hintCount > 0) {
-    hintCount--;
-    hintBtn.innerHTML =
-      hintCount === 1
-        ? `<span>${hintCount}</span> hint`
-        : `<span>${hintCount}</span> hints`;
-  }
-  if (hintCount === 0) {
-    hintBtn.disabled = true;
-  }
-
   /* (Elzero's) const enabledInputs = document.querySelectorAll(".inputs input:not([disabled])");
     we used this instead of Elzero's way because his way assumes all enabled inputs will be in current try
     my approach includes disabling hint inputs so his way will not count 'hint' inputs causing variable 'enabledInputs' to not be in line with wordToGuess indexing
@@ -372,13 +392,15 @@ function showHint() {
   const currentInputs = Array.from(allTryDivs[currentTry - 1].children).slice(
     1,
   );
+  // console.log(currentInputs);
+
   const validHintInputs = currentInputs.filter((el, index) => {
-    console.log(index);
-    return el.value == "" && !el.disabled && !previousHints.includes(index);
+    // console.log(index);
+    return (
+      el.value !== wordToGuess.text[index] && !previousHints.includes(index)
+    );
   });
-  console.log(validHintInputs);
-  // console.log(tryInputs);
-  // console.log(emptyEnabledInputs);
+  // console.log(validHintInputs);
 
   /*
     remember the difference between an expression and a statement
@@ -396,15 +418,27 @@ function showHint() {
     let randomIndex = Math.floor(Math.random() * validHintInputs.length);
     let randomInput = validHintInputs[randomIndex];
     let indexToFill = currentInputs.indexOf(randomInput);
-    console.log(randomInput);
+
+    // console.log(indexToFill)
+    // console.log(randomInput);
     // console.log("randomIndex: ", randomIndex);
     // console.log("randomInput: ", randomInput);
     // console.log("wordToGuess[indexToFill]: ",wordToGuess[indexToFill]);
-    // console.log("indexToFill: ", indexToFill);
     // console.log("previousHints: ",previousHints);
-    previousHints.push(indexToFill);
+
     randomInput.value = wordToGuess.text[indexToFill];
     randomInput.disabled = true;
+    previousHints.push(indexToFill);
+    if (hintCount > 0) {
+      hintCount--;
+      hintBtn.innerHTML =
+        hintCount === 1
+          ? `<span>${hintCount}</span> hint`
+          : `<span>${hintCount}</span> hints`;
+    }
+  }
+  if (hintCount === 0) {
+    hintBtn.disabled = true;
   }
 }
 
@@ -427,9 +461,6 @@ function controlTry(inputDiv, disable) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  chooseWord();
-  messageEl.innerHTML = `It's a: <span>${wordToGuess.category}</span>`;
-
   // console.log("letterCount when content loaded: ", letterCount);
   generateInput((tCount = triesCount), (lCount = letterCount));
 });
