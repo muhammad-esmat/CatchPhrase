@@ -142,7 +142,6 @@ No frameworks. No libraries. No build step.
 ## Credits
 
 - **Original concept & base**: [Elzero Web School](https://elzero.org/)
-- **Improvements & maintenance**: [Muhammad Esmat](https://github.com/muhammad-esmat)
 
 > The `Design/` folder is excluded from version control via `.gitignore`.
 
