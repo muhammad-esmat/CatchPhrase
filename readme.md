@@ -7,6 +7,7 @@ A modern, browser-based word guessing game where players try to guess a hidden w
 ## 📖 Table of Contents
 
 - [About the Project](#about-the-project)
+- [Live Demo](#-live-demo)
 - [Features](#features)
 - [How to Play](#how-to-play)
 - [Difficulty Levels](#difficulty-levels)
@@ -24,6 +25,13 @@ A modern, browser-based word guessing game where players try to guess a hidden w
 The game also features a category hint system, difficulty selection, hint usage, and a dark/light mode toggle.
 
 ---
+
+## 🚀 Live Demo
+
+> **Think you can guess the word with zero hints?**
+### 👉 [**Try it now** →](https://muhammad-esmat.github.io/CatchPhrase/)
+
+--- 
 
 ## Features
 
