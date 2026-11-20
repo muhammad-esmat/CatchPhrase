@@ -81,7 +81,7 @@ let words = [
 
   // of 6 letters
   { text: "divide", categoryArticle: "a", category: "mathematical operator" },
-  { text: "jaguar", categoryArticle: "an", category: "wild animal" },
+  { text: "jaguar", categoryArticle: "a", category: "wild animal" },
   { text: "castle", categoryArticle: "a", category: "place" },
   { text: "shrimp", categoryArticle: "a", category: "marine animal" },
   { text: "eleven", categoryArticle: "a", category: "number" },

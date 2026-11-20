@@ -31,11 +31,13 @@ The game also features a category hint system, difficulty selection, hint usage,
 > **Think you can guess the word with zero hints?**
 ### 👉 [**Try it now** →](https://muhammad-esmat.github.io/CatchPhrase/)
 
+![CatchPhrase Gameplay](gameplay_media/gameplay3.gif)
+
 --- 
 
 ## Features
 
-- 🎲 **Random Word Selection** — Words are picked from categorized lists (4, 5, and 6-letter words).
+- 🔀 **Random Word Selection** — Words are picked from categorized lists (4, 5, and 6-letter words).
 - 🧠 **Category Clue** — Each round displays a category hint (e.g., *"It's a marine animal"*).
 - 🎨 **Color-Coded Feedback** — Letters are marked as:
   - 🟩 **In place** (correct letter, correct position)
