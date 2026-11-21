@@ -9,6 +9,7 @@ A modern, browser-based word guessing game where players try to guess a hidden w
 - [About the Project](#about-the-project)
 - [Live Demo](#-live-demo)
 - [Features](#features)
+- [What I improved](#what-i-improved)
 - [How to Play](#how-to-play)
 - [Difficulty Levels](#difficulty-levels)
 - [File Structure](#file-structure)
@@ -49,6 +50,18 @@ The game also features a category hint system, difficulty selection, hint usage,
 - 🌗 **Dark/Light Mode** — Toggle the theme; persisted per session.
 - ⌨️ **Keyboard Friendly** — Arrow keys, Backspace, and Enter are all supported.
 - 📱 **Responsive Layout** — Works across screen sizes (thanks to CSS grid/flexbox).
+
+---
+
+## What I Improved
+
+Building on the original Elzero Web School project, I added and refined the following:
+
+- ⚙️ **Difficulty Settings Panel** — A settings dropdown lets players switch between Easy, Medium, Hard, and Extreme, each adjusting tries and hints.
+- 🌗 **Dark/Light Theme** — A toggle in the header switches the entire UI theme, with dedicated CSS variables for both modes.
+- ⌫ **Better Backspace Handling** — Refined key handling so Backspace clears the current tile and moves focus back predictably.
+- ␣ **Space Key Support** — The spacebar now advances to the next input tile, improving typing flow.
+- 🎨 **Root CSS Variables** — Centralized all colors, spacing, and theme values into `:root` and `[data-theme="dark"]` variables for easy theming and maintenance.
 
 ---
 
